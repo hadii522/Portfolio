@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="loading.js"></script>
+  <link rel="preload" as="image" href="assets/animation/frame_0001.webp" fetchpriority="high">
   <title>Aizaz Haider Goraya | Data Scientist & AI Developer</title>
   <meta name="description" content="Portfolio of Aizaz Haider Goraya — Data Scientist & Full-Stack AI Developer specializing in Machine Learning, Predictive Analytics, NLP, FastAPI, and Full-Stack Engineering.">
   <meta name="keywords" content="Aizaz Haider Goraya, Data Scientist, AI Developer, Machine Learning, Python, FastAPI, FAST NUCES, Portfolio">
@@ -29,6 +31,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+  <div id="page-loader" class="loader-overlay" aria-hidden="true">
+    <div class="loader-mark" aria-hidden="true">AG<span></span></div>
+    <p class="loader-name">AIZAZ GORAYA</p>
+    <p class="loader-text" role="status">Preparing the background</p>
+    <div class="loader-bar-bg" aria-hidden="true"><div class="loader-bar-fill"></div></div>
+    <button id="loader-continue" class="loader-continue" type="button">Continue to portfolio <span aria-hidden="true">&rarr;</span></button>
+  </div>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- Interactive 3D Background Canvas -->

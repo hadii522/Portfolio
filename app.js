@@ -2,7 +2,7 @@
   'use strict';
   const canvas = document.getElementById('animation-canvas');
   const context = canvas?.getContext('2d');
-  if (!context) return;
+  if (!context) { window.portfolioIntro?.finish(false); return; }
 
   const FRAME_COUNT = 240;
   const MAX_PENDING = 4;
@@ -79,6 +79,7 @@
       pending.delete(index);
       if (success) images.set(index, image);
       else failed.add(index);
+      if (index === 0 && !success) window.portfolioIntro?.finish(false);
       trimCache();
       fillBuffer();
       if (Math.abs(targetIndex - currentIndex) > EPSILON || index === Math.floor(currentIndex) || index === Math.ceil(currentIndex)) schedule();
@@ -137,6 +138,7 @@
       context.globalAlpha = 1;
     }
     lastDrawnPosition = currentIndex;
+    window.portfolioIntro?.finish(true);
   }
   function draw(timestamp) {
     frameRequest = 0;
@@ -167,6 +169,7 @@
   function refreshPreference() {
     lastTimestamp = null;
     if (!enabled()) {
+      window.portfolioIntro?.finish(false);
       cancelAnimationFrame(frameRequest);
       frameRequest = 0;
       canvas.hidden = true;

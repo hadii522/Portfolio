@@ -64,7 +64,7 @@ function runScript(filename, globals) {
   vm.runInNewContext(fs.readFileSync(path.join(siteRoot, filename), 'utf8'), globals, { filename });
 }
 
-function animationHarness({ reducedMotion = false, mobile = false, saveData = false, hidden = false, canvas = true, context = true } = {}) {
+function animationHarness({ reducedMotion = false, mobile = false, saveData = false, hidden = false, canvas = true, context = true, intro } = {}) {
   const scheduler = frameScheduler();
   const motion = eventTarget({ matches: reducedMotion });
   const screen = eventTarget({ matches: mobile });
@@ -89,7 +89,7 @@ function animationHarness({ reducedMotion = false, mobile = false, saveData = fa
     fail() { this.settled = true; this.failed = true; this.onerror(); }
   }
   const document = eventTarget({ hidden, getElementById: () => canvas ? canvasElement : null, documentElement: { scrollHeight: 4000 } });
-  const window = eventTarget({ innerWidth: 1440, innerHeight: 900, scrollY: 0, devicePixelRatio: 3,
+  const window = eventTarget({ innerWidth: 1440, innerHeight: 900, scrollY: 0, devicePixelRatio: 3, portfolioIntro: intro,
     matchMedia: query => query.includes('prefers-reduced-motion') ? motion : screen });
   runScript('app.js', { document, window, navigator: { connection }, Image,
     requestAnimationFrame: scheduler.requestAnimationFrame, cancelAnimationFrame: scheduler.cancelAnimationFrame });
@@ -116,6 +116,92 @@ async function settleAnimation(harness, limit = 500) {
   }
   assert.fail('animation/buffer must settle; possible idle loop or repeated cache downloads');
 }
+
+function loadingHarness({ storage = new Map(), blockedStorage = false, reducedMotion = false, saveData = false } = {}) {
+  const root = element(), loader = element(), button = element(), main = element();
+  const timers = new Map();
+  const document = eventTarget({
+    documentElement: root,
+    removeEventListener() {},
+    getElementById: id => ({ 'page-loader': loader, 'loader-continue': button, 'main-content': main })[id]
+  });
+  const window = { matchMedia: () => ({ matches: reducedMotion }) };
+  runScript('loading.js', {
+    document, window, navigator: { connection: { saveData } },
+    localStorage: {
+      getItem(key) { if (blockedStorage) throw new Error('Storage unavailable'); return storage.get(key); },
+      setItem(key, value) { if (blockedStorage) throw new Error('Storage unavailable'); storage.set(key, value); }
+    },
+    setTimeout(callback, delay) { assert.equal(delay, 8000); timers.set(1, callback); return 1; },
+    clearTimeout(id) { timers.delete(id); }
+  });
+  return { root, loader, button, main, document, window, timers, storage };
+}
+
+test('first-visit loader waits for decoded canvas pixels and remembers successful visits', async () => {
+  const intro = loadingHarness();
+  assert.equal(intro.root.classList.contains('background-loading'), true);
+  intro.document.dispatch('DOMContentLoaded');
+  assert.equal(intro.loader.getAttribute('aria-hidden'), 'false');
+  const animation = animationHarness({ intro: intro.window.portfolioIntro });
+  animation.requests[0].succeed({ decoded: false });
+  await flushMicrotasks(); animation.scheduler.tick();
+  assert.equal(intro.root.classList.contains('background-loading'), true, 'encoded bytes alone cannot release the loader');
+  animation.requests[0].resolveDecode(); await flushMicrotasks();
+  assert.equal(intro.root.classList.contains('background-loading'), true, 'pixels must be drawn before revealing the page');
+  animation.scheduler.tick();
+  assert.ok(animation.drawCalls.length > 0);
+  assert.equal(intro.root.classList.contains('background-loading'), false);
+  assert.equal(intro.loader.getAttribute('aria-hidden'), 'true');
+  assert.equal(intro.timers.size, 0);
+  const revisit = loadingHarness({ storage: intro.storage });
+  assert.equal(revisit.root.classList.contains('background-loading'), false);
+  assert.equal(revisit.timers.size, 0);
+});
+
+test('loader timeout releases the page even if the animation script never runs', () => {
+  const h = loadingHarness();
+  h.timers.get(1)();
+  h.document.dispatch('DOMContentLoaded');
+  assert.equal(h.root.classList.contains('background-loading'), false);
+  assert.equal(h.loader.getAttribute('aria-hidden'), 'true');
+  assert.equal(h.storage.size, 0, 'a failed visit must allow a later retry');
+});
+
+test('loader can be skipped without storage and restores focus from its Continue button', () => {
+  const h = loadingHarness({ blockedStorage: true });
+  h.document.dispatch('DOMContentLoaded');
+  h.document.activeElement = { closest: () => h.loader };
+  h.button.dispatch('click');
+  assert.equal(h.root.classList.contains('background-loading'), false);
+  assert.equal(h.main.focused, true);
+  assert.doesNotThrow(() => h.window.portfolioIntro.finish(true));
+  const escape = loadingHarness();
+  escape.document.dispatch('keydown', { key: 'Escape' });
+  assert.equal(escape.root.classList.contains('background-loading'), false);
+});
+
+test('loader is bypassed for reduced motion and data saving', () => {
+  for (const preference of [{ reducedMotion: true }, { saveData: true }]) {
+    const h = loadingHarness(preference);
+    assert.equal(h.root.classList.contains('background-loading'), false);
+    assert.equal(h.timers.size, 0);
+  }
+});
+
+test('unavailable canvas or a failed first frame releases the loader immediately', () => {
+  for (const option of [{ canvas: false }, { context: false }, { reducedMotion: true }]) {
+    const h = loadingHarness();
+    animationHarness({ ...option, intro: h.window.portfolioIntro });
+    assert.equal(h.root.classList.contains('background-loading'), false);
+    assert.equal(h.storage.size, 0);
+  }
+  const h = loadingHarness();
+  const animation = animationHarness({ intro: h.window.portfolioIntro });
+  animation.requests[0].fail();
+  assert.equal(h.root.classList.contains('background-loading'), false);
+  assert.equal(h.storage.size, 0);
+});
 
 for (const preference of [{ reducedMotion: true }, { saveData: true }, { hidden: true }]) {
   test(`animation avoids frame requests for ${JSON.stringify(preference)}`, () => {

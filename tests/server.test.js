@@ -187,7 +187,7 @@ test('real portfolio file can be streamed through the handler without socket acc
   assert.equal(Number(response.headers['content-length']), Buffer.byteLength(response.body));
 });
 
-for (const filename of ['navigation.js', 'projects.js']) {
+for (const filename of ['navigation.js', 'projects.js', 'loading.js']) {
   test(`public script ${filename} streams successfully with JavaScript MIME and revalidation`, async () => {
     const response = await request(`/${filename}`, { fileSystem: require('node:fs') });
     assert.equal(response.statusCode, 200);

@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 const pages = ['index.html', 'projects.html'];
-const files = [...pages, 'style.css', 'app.js', 'navigation.js', 'projects.js', 'favicon.svg', 'CV_Aizaz_Haider_Goraya.pdf'];
+const files = [...pages, 'style.css', 'loading.js', 'app.js', 'navigation.js', 'projects.js', 'favicon.svg', 'CV_Aizaz_Haider_Goraya.pdf'];
 const expected = new Set([...files, '.nojekyll', 'robots.txt', 'sitemap.xml']);
 
 function assetFiles(directory, relative = 'assets') {

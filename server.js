@@ -24,7 +24,7 @@ const MIME_TYPES = {
 };
 
 const PUBLIC_FILES = new Set([
-  'index.html', 'projects.html', 'style.css', 'app.js', 'navigation.js', 'projects.js',
+  'index.html', 'projects.html', 'style.css', 'loading.js', 'app.js', 'navigation.js', 'projects.js',
   'CV_Aizaz_Haider_Goraya.pdf', 'favicon.ico', 'robots.txt', 'sitemap.xml'
 ]);
 const IMAGE_EXTENSIONS = new Set(['.jpg', '.jpeg', '.png', '.gif', '.svg', '.ico', '.webp', '.avif']);
