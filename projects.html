@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects & Case Studies | Aizaz Haider Goraya</title>
+  <meta name="description" content="Explore Data Science analytics, Machine Learning models, REST APIs, and Full-Stack AI projects developed by Aizaz Haider Goraya.">
+  <meta name="keywords" content="Data Science Projects, Machine Learning Portfolio, AI Projects, Aizaz Goraya">
+  <meta name="author" content="Aizaz Haider Goraya">
+
+  <!-- OpenGraph / Social Media Share Card -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Projects & Case Studies | Aizaz Haider Goraya">
+  <meta property="og:description" content="A comprehensive showcase of Data Science analytics, Machine Learning models, Full-Stack Web microservices, and Computer Vision solutions.">
+  <meta property="og:image" content="assets/thumbnails/sharego.webp">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="assets/thumbnails/sharego.webp">
+  <meta name="twitter:title" content="Projects & Case Studies | Aizaz Haider Goraya">
+  <meta name="twitter:description" content="A comprehensive showcase of Data Science analytics, Machine Learning models, Full-Stack Web microservices, and Computer Vision solutions.">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#09090d">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="projects-page-bg">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- Header Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">
+        <svg class="logo-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#E62E38"/>
+              <stop offset="100%" stop-color="#FF6B00"/>
+            </linearGradient>
+          </defs>
+          <path d="M20 4L34 12V28L20 36L6 28V12L20 4Z" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M20 12L28 17V23L20 28L12 23V17L20 12Z" fill="url(#logo-grad)"/>
+        </svg>
+        <span class="logo-text">AIZAZ GORAYA</span>
+      </a>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button id="menu-toggle" class="mobile-toggle" aria-label="Open navigation menu" aria-controls="nav-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav id="nav-menu" class="nav-links">
+        <a href="index.html#about" class="nav-link">ABOUT</a>
+        <a href="index.html#skills" class="nav-link">SKILLS</a>
+        <a href="projects.html" class="nav-link active" aria-current="page">PROJECTS</a>
+        <a href="index.html#experience" class="nav-link">EXPERIENCE</a>
+        <a href="index.html#contact" class="nav-link">CONTACT</a>
+        <a href="CV_Aizaz_Haider_Goraya.pdf" download class="btn btn-nav-cv">DOWNLOAD CV</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Scrollable Content -->
+  <main id="main-content" class="content-overlay" tabindex="-1">
+
+    <!-- SECTION 1: Projects Page Hero Header -->
+    <section class="section page-hero-section">
+      <div class="section-container text-center">
+        <div class="hero-badge">
+          <span class="badge-icon">🚀</span> Portfolio Showcase
+        </div>
+        <h1 class="page-title">Featured Projects &amp; AI Engineering Work</h1>
+        <p class="page-subtitle">
+          Selected work in AI, data science, full-stack applications, and practical business automation.
+        </p>
+
+        <p class="artwork-note">AI-generated project illustrations</p>
+        <!-- Interactive Category Filter Buttons -->
+        <div class="project-filters" role="group" aria-label="Filter projects by category">
+          <button type="button" class="filter-btn active" aria-pressed="true" data-filter="all">ALL PROJECTS</button>
+          <button type="button" class="filter-btn" aria-pressed="false" data-filter="ai-ml">DATA SCIENCE &amp; ML</button>
+          <button type="button" class="filter-btn" aria-pressed="false" data-filter="fullstack">FULL-STACK &amp; APIS</button>
+          <button type="button" class="filter-btn" aria-pressed="false" data-filter="vision">COMPUTER VISION</button>
+          <button type="button" class="filter-btn" aria-pressed="false" data-filter="automation">AUTOMATION</button>
+        </div>
+        <p id="project-filter-status" class="filter-status" role="status" aria-live="polite" aria-atomic="true">14 projects shown</p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: All Projects Showcase Grid -->
+    <section class="section projects-showcase-section" aria-labelledby="completed-projects-title">
+      <div class="section-container">
+        <h2 id="completed-projects-title" class="sr-only">Selected projects</h2>
+        
+        <div class="showcase-grid">
+
+          <!-- Project 1: ShareGo -->
+          <div class="project-card showcase-card" data-category="fullstack">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/sharego.webp" width="1280" height="720" decoding="async" loading="eager" alt="ShareGo Baggage Sharing Platform">
+              <span class="project-tag">Final Year Project</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">ShareGo — Digital Baggage Sharing Marketplace</h3>
+              <p class="project-desc">
+                A cross-platform mobile &amp; web marketplace connecting travelers with unused baggage capacity. Includes user authentication, listings, booking workflows, traveler verification, messaging, and AI chatbot integration.
+              </p>
+              <div class="project-highlights">
+                <span>✓ Flutter &amp; FastAPI backend</span>
+                <span>✓ AI Chatbot Integration</span>
+                <span>✓ SQLite Database &amp; REST APIs</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>Flutter</span><span>FastAPI</span><span>SQLite</span><span>AI Chatbot</span><span>Python</span>
+              </div>
+            </div>
+          </div>
+
+          <article class="project-card showcase-card" data-category="fullstack">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/seller-math.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Calculator, receipt and profit chart illustration">
+              <span class="project-tag">Web Product</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">SellerMath — Seller Profit &amp; Fee Calculators</h3>
+              <p class="project-desc">A Next.js and TypeScript application for exploring product profit, marketplace fees, break-even advertising returns, and target selling prices. Separates calculation logic from reusable interfaces, with marketplace-specific tools and explanatory guides.</p>
+              <div class="project-highlights">
+                <span>✓ 6 interactive calculators</span>
+                <span>✓ 31 calculation and supporting checks passed</span>
+                <span>✓ SEO metadata &amp; structured data</span>
+              </div>
+              <div class="project-tech-stack"><span>Next.js</span><span>TypeScript</span><span>React</span><span>Tailwind CSS</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="ai-ml automation">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/tdhca-extraction.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Documents flowing through an AI extraction gateway into a spreadsheet">
+              <span class="project-tag">AI &amp; Document Processing</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">TDHCA — AI Document Extraction &amp; Reporting</h3>
+              <p class="project-desc">A Python document-processing pipeline that collects underwriting PDFs, extracts their text, structures fields through an LLM, and maps the results into Excel reporting templates.</p>
+              <div class="project-highlights">
+                <span>✓ PDF collection &amp; text extraction</span>
+                <span>✓ LLM response parsing &amp; field mapping</span>
+                <span>✓ Template-based Excel reporting</span>
+              </div>
+              <div class="project-tech-stack"><span>Python</span><span>Groq</span><span>pdfplumber</span><span>openpyxl</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="automation">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/shopify-lumise.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Order documents passing through an automated workflow into cloud folders">
+              <span class="project-tag">Business Automation</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Shopify/Lumise — Order Document Automation</h3>
+              <p class="project-desc">Connects order tracking in Google Sheets with browser-based document downloads and organized Google Drive uploads. Separate modules coordinate order polling, browser sessions, file handling, and processing status.</p>
+              <div class="project-highlights">
+                <span>✓ Google Sheets order polling</span>
+                <span>✓ Browser-based PDF downloads</span>
+                <span>✓ Google Drive folder integration</span>
+              </div>
+              <div class="project-tech-stack"><span>Python</span><span>Playwright</span><span>Google Sheets API</span><span>Google Drive API</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="fullstack">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/flowmate.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Smartphone with calendar and note tiles connected to a cloud">
+              <span class="project-tag">Firebase Web App</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">FlowMate — Scheduling &amp; Notes Application</h3>
+              <p class="project-desc">A responsive workflow application with Firebase authentication, shift scheduling, calendar views, personal and shared notes, profile settings, and calculator interfaces.</p>
+              <div class="project-highlights">
+                <span>✓ Email &amp; Google sign-in</span>
+                <span>✓ Shift calendar &amp; scheduling</span>
+                <span>✓ Notes, sharing &amp; profile management</span>
+              </div>
+              <div class="project-tech-stack"><span>JavaScript</span><span>Firebase Auth</span><span>Cloud Firestore</span><span>HTML/CSS</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="fullstack">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/food-waste.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Fresh surplus food in a reusable crate beside a shopping interface">
+              <span class="project-tag">ASP.NET &amp; SQL Server</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Food Waste Reduction Platform</h3>
+              <p class="project-desc">An ASP.NET Core MVC application connecting surplus-food listings with buyers. Includes product browsing, a session-based cart, checkout, order tracking, and administration screens for products and orders.</p>
+              <div class="project-highlights">
+                <span>✓ Product catalog, cart &amp; checkout</span>
+                <span>✓ Product &amp; order administration</span>
+                <span>✓ Entity models &amp; database migrations</span>
+              </div>
+              <div class="project-tech-stack"><span>C#</span><span>ASP.NET Core MVC</span><span>Entity Framework</span><span>SQL Server</span></div>
+            </div>
+          </article>
+
+          <!-- Project 3: Heart Disease Analytics & Classification -->
+          <div class="project-card showcase-card" data-category="ai-ml">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/heart-disease.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Heart Disease Analytics & Classification">
+              <span class="project-tag">Data Science &amp; ML</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Heart Disease Analytics &amp; Classification Suite</h3>
+              <p class="project-desc">
+                Exploratory analysis and comparison of six baseline classifiers: Perceptron, Logistic Regression, KNN, Decision Tree, Random Forest, and SVM. The baseline experiment uses a stratified train/test split and reports 89.7% test accuracy for Random Forest.
+              </p>
+              <div class="project-highlights">
+                <span>✓ 6 Baseline Classifiers</span>
+                <span>✓ Correlation &amp; Feature Ranking</span>
+                <span>✓ Stratified Train/Test Evaluation</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>Python</span><span>Pandas</span><span>NumPy</span><span>scikit-learn</span><span>XGBoost</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 5: AI Chatbot & Deep Learning NLP Engine -->
+          <div class="project-card showcase-card" data-category="ai-ml">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/nlp-assistant.webp" width="1280" height="720" decoding="async" loading="lazy" alt="AI Chatbot & NLP Engine">
+              <span class="project-tag">AI &amp; NLP</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Deep Learning NLP &amp; LLM Assistant Engine</h3>
+              <p class="project-desc">
+                Custom Natural Language Processing engine utilizing Transformer models (BERT, RoBERTa, LLaMA, T5) for context-aware text classification, intent recognition, and conversational intelligence.
+              </p>
+              <div class="project-highlights">
+                <span>✓ Transformer-Based NLP</span>
+                <span>✓ Intent Recognition &amp; Embeddings</span>
+                <span>✓ FastAPI Inference Endpoint</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>PyTorch</span><span>BERT</span><span>LLaMA</span><span>NLP</span><span>FastAPI</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 6: Executive Data Analytics & BI Dashboard -->
+          <div class="project-card showcase-card" data-category="ai-ml">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/bi-dashboard.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Executive BI Dashboard">
+              <span class="project-tag">Data Analytics &amp; BI</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Executive Data Analytics &amp; BI Dashboards</h3>
+              <p class="project-desc">
+                Interactive analytical dashboards created using Power BI, Tableau, and Streamlit. Transforms raw multi-source business data into dynamic KPI visual metrics, trend analysis, and executive reports.
+              </p>
+              <div class="project-highlights">
+                <span>✓ Business KPI Visualization</span>
+                <span>✓ Power BI &amp; Streamlit Visuals</span>
+                <span>✓ Data Preprocessing &amp; Cleaning</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>Power BI</span><span>Tableau</span><span>Streamlit</span><span>Python</span><span>SQL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 4: Car Parking Management System -->
+          <div class="project-card showcase-card" data-category="vision">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/car-parking.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Car Parking Management System">
+              <span class="project-tag">C# &amp; Computer Vision</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Car Parking Management &amp; License Plate Tracking</h3>
+              <p class="project-desc">
+                Automated desktop parking management application developed in C#. Integrates camera-based image processing for license plate tracking, with detection and application integration refined through iterative testing.
+              </p>
+              <div class="project-highlights">
+                <span>✓ Camera Image Processing</span>
+                <span>✓ License Plate Tracking</span>
+                <span>✓ Detection &amp; Integration Testing</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>C#</span><span>Image Processing</span><span>C# Desktop App</span><span>License Plate Tracking</span>
+              </div>
+            </div>
+          </div>
+
+          <article class="project-card showcase-card" data-category="automation">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/forum-pipeline.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Discussion-thread cards connected to a database through a data pipeline">
+              <span class="project-tag">Data Extraction</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Resumable Forum Data Extraction Pipeline</h3>
+              <p class="project-desc">A Python extraction pipeline that discovers forum boards and threads, follows paginated discussions, and parses structured content. Persistent checkpoints and discovery caches support interrupted runs, while concurrent workers process threads.</p>
+              <div class="project-highlights">
+                <span>✓ Board &amp; thread discovery</span>
+                <span>✓ Persistent checkpoints &amp; caches</span>
+                <span>✓ Concurrent thread processing</span>
+              </div>
+              <div class="project-tech-stack"><span>Python</span><span>Requests</span><span>BeautifulSoup</span><span>ThreadPoolExecutor</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="automation">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/vinted-monitor.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Marketplace listing cards and a notification bell beside a mobile device">
+              <span class="project-tag">Monitoring &amp; Notifications</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Marketplace Listing Monitor &amp; Alerts</h3>
+              <p class="project-desc">A modular marketplace monitor that collects listings, tracks previously seen items, and sends Telegram notifications for newly detected entries. Includes configurable polling, persistent tracking, and operational logging.</p>
+              <div class="project-highlights">
+                <span>✓ Listing collection &amp; filtering</span>
+                <span>✓ Persistent duplicate detection</span>
+                <span>✓ Telegram notification integration</span>
+              </div>
+              <div class="project-tech-stack"><span>Python</span><span>Requests</span><span>BeautifulSoup</span><span>Telegram API</span></div>
+            </div>
+          </article>
+
+          <article class="project-card showcase-card" data-category="automation">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/catalog-enrichment.webp" width="1280" height="720" decoding="async" loading="lazy" alt="Product image cards being matched into a spreadsheet grid">
+              <span class="project-tag">Spreadsheet Automation</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Product Catalog Image Enrichment</h3>
+              <p class="project-desc">A catalog-enrichment utility that reads product identifiers from Excel, searches matching catalog entries, extracts product-image URLs, and writes image links back into the spreadsheet.</p>
+              <div class="project-highlights">
+                <span>✓ Excel-based product identifiers</span>
+                <span>✓ Catalog matching &amp; image extraction</span>
+                <span>✓ Image-link enrichment &amp; logging</span>
+              </div>
+              <div class="project-tech-stack"><span>Python</span><span>Pandas</span><span>Requests</span><span>Excel</span></div>
+            </div>
+          </article>
+
+          <!-- Project 2: Energy Trading Platform -->
+          <div class="project-card showcase-card" data-category="fullstack">
+            <div class="project-thumb">
+              <img src="assets/thumbnails/energy-trading.webp" width="1280" height="720" decoding="async" loading="eager" alt="Energy Trading Platform">
+              <span class="project-tag">Full-Stack &amp; DevOps</span>
+            </div>
+            <div class="project-info">
+              <h3 class="project-name">Energy Market Intelligence — Platform Architecture</h3>
+              <p class="project-desc">
+                Architecture and application scaffolding for an energy-market analytics platform. Includes FastAPI application setup, Docker Compose configuration, and documented ingestion, forecasting, and reporting workflows.
+              </p>
+              <div class="project-highlights">
+                <span>✓ Docker Containerization</span>
+                <span>✓ FastAPI Application Scaffold</span>
+                <span>✓ Documented Data &amp; ML Workflows</span>
+              </div>
+              <div class="project-tech-stack">
+                <span>Python</span><span>Docker</span><span>REST APIs</span><span>CI/CD</span><span>Data Management</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Development & Engineering Methodology -->
+    <section class="section process-section">
+      <div class="section-container">
+        
+        <div class="section-header center">
+          <h2 class="section-title">ENGINEERING METHODOLOGY</h2>
+          <p class="section-subtitle">How I transform raw data into production-ready software solutions</p>
+        </div>
+
+        <div class="process-grid">
+          
+          <div class="process-card">
+            <div class="process-number">01</div>
+            <h3 class="process-title">Problem EDA &amp; Data Pipeline</h3>
+            <p class="process-text">Deep-dive exploratory data analysis, data cleaning, feature engineering, and pipeline setup to prepare high-quality datasets.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">02</div>
+            <h3 class="process-title">Model Architecture &amp; Training</h3>
+            <p class="process-text">Selecting and benchmark-testing machine learning, NLP, or computer vision models to maximize predictive accuracy.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">03</div>
+            <h3 class="process-title">API Microservices &amp; Web UI</h3>
+            <p class="process-text">Designing robust RESTful backend APIs with FastAPI/Flask and building responsive user interfaces with React / Flutter.</p>
+          </div>
+
+          <div class="process-card">
+            <div class="process-number">04</div>
+            <h3 class="process-title">Containerization &amp; Deployment</h3>
+            <p class="process-text">Packaging applications into Docker containers, setting up GitHub Actions CI/CD workflows, and deploying to cloud infrastructure.</p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: Call To Action (Let's Collaborate) -->
+    <section class="section cta-section">
+      <div class="section-container">
+        <div class="cta-card">
+          <div class="cta-content">
+            <h2 class="cta-title">Have a Data Science or<br>Software Project in Mind?</h2>
+            <p class="cta-text">
+              Let's turn your raw data into actionable intelligence and production-ready AI applications. I'm open for software engineering, ML, and data roles!
+            </p>
+            <div class="contact-methods">
+              <div class="method-item">
+                <span class="method-label">Email:</span>
+                <a href="mailto:hgoraya522@gmail.com">hgoraya522@gmail.com</a>
+              </div>
+              <div class="method-item">
+                <span class="method-label">Phone:</span>
+                <a href="tel:+923138308618">+92 313 8308618</a>
+              </div>
+            </div>
+
+            <!-- Social Action Buttons -->
+            <div class="social-buttons-grid">
+              <a href="https://wa.link/4eh1lq" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp-btn">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                WhatsApp
+              </a>
+              <a href="https://www.linkedin.com/in/aizaz-goraya-40a661348" target="_blank" rel="noopener noreferrer" class="social-btn linkedin-btn">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+                LinkedIn
+              </a>
+              <a href="https://www.github.com/hadii522" target="_blank" rel="noopener noreferrer" class="social-btn github-btn">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+                GitHub
+              </a>
+            </div>
+          </div>
+          <div class="cta-action">
+            <a href="mailto:hgoraya522@gmail.com" class="btn btn-primary btn-lg">GET IN TOUCH</a>
+            <a href="CV_Aizaz_Haider_Goraya.pdf" download class="btn btn-outline btn-lg">DOWNLOAD CV</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="section-container footer-content">
+        
+        <div class="footer-nav">
+          <a href="index.html#about">ABOUT</a>
+          <a href="index.html#skills">SKILLS</a>
+          <a href="projects.html">PROJECTS</a>
+          <a href="index.html#experience">EXPERIENCE</a>
+          <a href="index.html#contact">CONTACT</a>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-logo">
+            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+              <path d="M20 4L34 12V28L20 36L6 28V12L20 4Z" stroke="url(#logo-grad)" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M20 12L28 17V23L20 28L12 23V17L20 12Z" fill="url(#logo-grad)"/>
+            </svg>
+            <span class="logo-text">Aizaz Haider Goraya</span>
+          </div>
+
+          <div class="social-links">
+            <a href="https://wa.link/4eh1lq" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/in/aizaz-goraya-40a661348" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+            </a>
+            <a href="https://www.github.com/hadii522" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            </a>
+          </div>
+
+          <div class="copyright">
+            &copy; 2026 Aizaz Haider Goraya. All rights reserved.
+          </div>
+        </div>
+
+      </div>
+    </footer>
+
+  </main>
+
+  <script src="navigation.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>
