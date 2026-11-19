@@ -2,7 +2,7 @@
   'use strict';
   const canvas = document.getElementById('animation-canvas');
   const context = canvas?.getContext('2d');
-  if (!context) { window.portfolioIntro?.finish(false); return; }
+  if (!context) { window.portfolioBackground?.finish(false); return; }
 
   const FRAME_COUNT = 240;
   const MAX_PENDING = 4;
@@ -13,6 +13,9 @@
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const smallScreen = window.matchMedia('(max-width: 768px)');
   const connection = navigator.connection;
+  // Keep downloaded files as compressed blobs; decode only the playback buffer.
+  const sources = new Map();
+  const downloads = new Map();
   const images = new Map();
   const pending = new Set();
   const failed = new Set();
@@ -25,12 +28,52 @@
   let viewWidth = 0;
   let viewHeight = 0;
   let resizePending = true;
+  let nextDownload = 0;
+  let allDownloaded = false;
+  let downloadFailed = false;
 
   function enabled() {
     return !reducedMotion.matches && !connection?.saveData && !document.hidden;
   }
   function schedule() {
-    if (enabled() && !frameRequest) frameRequest = requestAnimationFrame(draw);
+    if (enabled() && allDownloaded && !frameRequest) frameRequest = requestAnimationFrame(draw);
+  }
+  function preloadFrames() {
+    if (!enabled() || downloadFailed || allDownloaded) return;
+    window.portfolioBackground?.loading();
+    while (downloads.size < (smallScreen.matches ? 3 : MAX_PENDING) && nextDownload < FRAME_COUNT) {
+      const index = nextDownload++;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      downloads.set(index, controller);
+      fetch(`assets/animation/frame_${String(index + 1).padStart(4, '0')}.webp`, { signal: controller.signal })
+        .then(response => {
+          if (!response.ok) throw new Error('Background frame unavailable');
+          return response.blob();
+        })
+        .then(blob => {
+          if (downloadFailed) return;
+          if (!blob.size) throw new Error('Background frame is empty');
+          sources.set(index, URL.createObjectURL(blob));
+          if (sources.size === FRAME_COUNT) {
+            allDownloaded = true;
+            refreshPreference();
+          }
+        })
+        .catch(() => {
+          if (downloadFailed) return;
+          downloadFailed = true;
+          for (const download of downloads.values()) download.abort();
+          for (const source of sources.values()) URL.revokeObjectURL(source);
+          sources.clear();
+          window.portfolioBackground?.finish(false);
+        })
+        .finally(() => {
+          clearTimeout(timeout);
+          downloads.delete(index);
+          preloadFrames();
+        });
+    }
   }
   function updateTarget() {
     const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -61,7 +104,7 @@
   // Rebuild priorities after every completion or direction change. In-flight
   // requests stay bounded; stale completions never choose the displayed frame.
   function fillBuffer() {
-    if (!enabled()) return;
+    if (!enabled() || !allDownloaded) return;
     for (const index of bufferCandidates()) {
       if (pending.size >= (smallScreen.matches ? 3 : MAX_PENDING)) break;
       if (index < 0 || index >= FRAME_COUNT || images.has(index) || pending.has(index) || failed.has(index)) continue;
@@ -79,7 +122,7 @@
       pending.delete(index);
       if (success) images.set(index, image);
       else failed.add(index);
-      if (index === 0 && !success) window.portfolioIntro?.finish(false);
+      if (index === 0 && !success) window.portfolioBackground?.finish(false);
       trimCache();
       fillBuffer();
       if (Math.abs(targetIndex - currentIndex) > EPSILON || index === Math.floor(currentIndex) || index === Math.ceil(currentIndex)) schedule();
@@ -94,7 +137,7 @@
       }
     };
     image.onerror = () => finish(false);
-    image.src = `assets/animation/frame_${String(index + 1).padStart(4, '0')}.webp`;
+    image.src = sources.get(index);
   }
 
   function ready(index) { return images.has(index) || failed.has(index); }
@@ -138,11 +181,11 @@
       context.globalAlpha = 1;
     }
     lastDrawnPosition = currentIndex;
-    window.portfolioIntro?.finish(true);
+    window.portfolioBackground?.finish(true);
   }
   function draw(timestamp) {
     frameRequest = 0;
-    if (!enabled()) return;
+    if (!enabled() || !allDownloaded) return;
     if (resizePending) {
       viewWidth = window.innerWidth;
       viewHeight = window.innerHeight;
@@ -169,14 +212,15 @@
   function refreshPreference() {
     lastTimestamp = null;
     if (!enabled()) {
-      window.portfolioIntro?.finish(false);
+      window.portfolioBackground?.finish(false);
       cancelAnimationFrame(frameRequest);
       frameRequest = 0;
       canvas.hidden = true;
     } else {
-      canvas.hidden = false;
+      canvas.hidden = !allDownloaded;
       resizePending = true;
       updateTarget();
+      preloadFrames();
       fillBuffer();
       schedule();
     }

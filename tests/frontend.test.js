@@ -64,7 +64,7 @@ function runScript(filename, globals) {
   vm.runInNewContext(fs.readFileSync(path.join(siteRoot, filename), 'utf8'), globals, { filename });
 }
 
-function animationHarness({ reducedMotion = false, mobile = false, saveData = false, hidden = false, canvas = true, context = true, intro } = {}) {
+function animationHarness({ reducedMotion = false, mobile = false, saveData = false, hidden = false, canvas = true, context = true } = {}) {
   const scheduler = frameScheduler();
   const motion = eventTarget({ matches: reducedMotion });
   const screen = eventTarget({ matches: mobile });
@@ -88,14 +88,38 @@ function animationHarness({ reducedMotion = false, mobile = false, saveData = fa
     succeed({ decoded = true } = {}) { this.settled = true; this.onload(); if (decoded) this.resolveDecode(); }
     fail() { this.settled = true; this.failed = true; this.onerror(); }
   }
-  const document = eventTarget({ hidden, getElementById: () => canvas ? canvasElement : null, documentElement: { scrollHeight: 4000 } });
-  const window = eventTarget({ innerWidth: 1440, innerHeight: 900, scrollY: 0, devicePixelRatio: 3, portfolioIntro: intro,
+  const root = element({ scrollHeight: 4000 }), status = element({ hidden: true });
+  const document = eventTarget({ hidden,
+    getElementById: id => id === 'animation-canvas' ? (canvas ? canvasElement : null) : status,
+    documentElement: root });
+  const window = eventTarget({ innerWidth: 1440, innerHeight: 900, scrollY: 0, devicePixelRatio: 3,
     matchMedia: query => query.includes('prefers-reduced-motion') ? motion : screen });
-  runScript('app.js', { document, window, navigator: { connection }, Image,
-    requestAnimationFrame: scheduler.requestAnimationFrame, cancelAnimationFrame: scheduler.cancelAnimationFrame });
-  return { scheduler, motion, screen, connection, canvas: canvasElement, document, window, requests, drawCalls, renders };
+  const downloads = [], revoked = [], timers = new Map();
+  let nextTimer = 1;
+  const globals = { document, window, navigator: { connection }, Image, AbortController,
+    fetch(url, { signal }) {
+      return new Promise((resolve, reject) => {
+        const request = { url, settled: false,
+          succeed({ ok = true, empty = false } = {}) {
+            if (this.settled) return;
+            this.settled = true;
+            resolve({ ok, blob: async () => ({ size: empty ? 0 : 100, url }) });
+          },
+          fail() { if (!this.settled) { this.settled = true; reject(new Error('Download failed')); } }
+        };
+        signal.addEventListener('abort', () => request.fail());
+        downloads.push(request);
+      });
+    },
+    URL: { createObjectURL: blob => `blob:${blob.url}`, revokeObjectURL: source => revoked.push(source) },
+    setTimeout(callback, delay) { assert.equal(delay, 20000); const id = nextTimer++; timers.set(id, callback); return id; },
+    clearTimeout(id) { timers.delete(id); },
+    requestAnimationFrame: scheduler.requestAnimationFrame, cancelAnimationFrame: scheduler.cancelAnimationFrame };
+  runScript('loading.js', globals);
+  runScript('app.js', globals);
+  return { scheduler, motion, screen, connection, canvas: canvasElement, document, window, requests, drawCalls, renders, downloads, revoked, timers, root, status };
 }
-async function flushMicrotasks() { await Promise.resolve(); await Promise.resolve(); await Promise.resolve(); }
+async function flushMicrotasks() { for (let turn = 0; turn < 8; turn++) await Promise.resolve(); }
 function frameIndex(image) { return Number(image.url.match(/frame_(\d+)/)[1]) - 1; }
 function activeRequests(harness) { return harness.requests.filter(image => !image.decoded && !image.failed); }
 function renderedPositions(harness) {
@@ -105,7 +129,18 @@ function renderedPositions(harness) {
   });
 }
 function currentPosition(harness) { return renderedPositions(harness).at(-1); }
+async function finishDownloads(harness, holdIndex = -1) {
+  for (let batch = 0; batch < 250; batch++) {
+    const ready = harness.downloads.filter(download => !download.settled && frameIndex(download) !== holdIndex);
+    if (!ready.length) return;
+    assert.ok(ready.length <= (harness.screen.matches ? 3 : 4), 'download concurrency must be bounded');
+    for (const download of ready) download.succeed();
+    await flushMicrotasks();
+  }
+  assert.fail('downloads must complete without repeated network requests');
+}
 async function settleAnimation(harness, limit = 500) {
+  await finishDownloads(harness);
   for (let step = 0; step < limit; step++) {
     if (harness.scheduler.pending) harness.scheduler.tick();
     const budget = harness.screen.matches ? 3 : 4;
@@ -117,90 +152,85 @@ async function settleAnimation(harness, limit = 500) {
   assert.fail('animation/buffer must settle; possible idle loop or repeated cache downloads');
 }
 
-function loadingHarness({ storage = new Map(), blockedStorage = false, reducedMotion = false, saveData = false } = {}) {
-  const root = element(), loader = element(), button = element(), main = element();
-  const timers = new Map();
-  const document = eventTarget({
-    documentElement: root,
-    removeEventListener() {},
-    getElementById: id => ({ 'page-loader': loader, 'loader-continue': button, 'main-content': main })[id]
-  });
-  const window = { matchMedia: () => ({ matches: reducedMotion }) };
-  runScript('loading.js', {
-    document, window, navigator: { connection: { saveData } },
-    localStorage: {
-      getItem(key) { if (blockedStorage) throw new Error('Storage unavailable'); return storage.get(key); },
-      setItem(key, value) { if (blockedStorage) throw new Error('Storage unavailable'); storage.set(key, value); }
-    },
-    setTimeout(callback, delay) { assert.equal(delay, 8000); timers.set(1, callback); return 1; },
-    clearTimeout(id) { timers.delete(id); }
-  });
-  return { root, loader, button, main, document, window, timers, storage };
-}
-
-test('first-visit loader waits for decoded canvas pixels and remembers successful visits', async () => {
-  const intro = loadingHarness();
-  assert.equal(intro.root.classList.contains('background-loading'), true);
-  intro.document.dispatch('DOMContentLoaded');
-  assert.equal(intro.loader.getAttribute('aria-hidden'), 'false');
-  const animation = animationHarness({ intro: intro.window.portfolioIntro });
-  animation.requests[0].succeed({ decoded: false });
-  await flushMicrotasks(); animation.scheduler.tick();
-  assert.equal(intro.root.classList.contains('background-loading'), true, 'encoded bytes alone cannot release the loader');
-  animation.requests[0].resolveDecode(); await flushMicrotasks();
-  assert.equal(intro.root.classList.contains('background-loading'), true, 'pixels must be drawn before revealing the page');
-  animation.scheduler.tick();
-  assert.ok(animation.drawCalls.length > 0);
-  assert.equal(intro.root.classList.contains('background-loading'), false);
-  assert.equal(intro.loader.getAttribute('aria-hidden'), 'true');
-  assert.equal(intro.timers.size, 0);
-  const revisit = loadingHarness({ storage: intro.storage });
-  assert.equal(revisit.root.classList.contains('background-loading'), false);
-  assert.equal(revisit.timers.size, 0);
+test('blurred poster stays visible until all 240 downloads and the first canvas render finish', async () => {
+  const h = animationHarness();
+  assert.equal(h.canvas.hidden, true);
+  assert.equal(h.status.hidden, false);
+  assert.equal(h.scheduler.pending, 0);
+  h.window.scrollY = 1000; h.window.dispatch('scroll');
+  h.window.dispatch('resize');
+  assert.equal(h.requests.length, 0);
+  assert.equal(h.scheduler.pending, 0, 'scroll and resize must not start a partially loaded animation');
+  h.window.scrollY = 0; h.window.dispatch('scroll');
+  await finishDownloads(h, 239);
+  assert.equal(h.downloads.length, 240);
+  assert.equal(h.requests.length, 0, 'one missing file must keep the animation static');
+  assert.equal(h.root.classList.contains('animation-ready'), false);
+  h.downloads[239].succeed(); await flushMicrotasks();
+  assert.equal(h.canvas.hidden, false);
+  assert.equal(h.requests.length, 4);
+  h.requests[0].succeed({ decoded: false }); await flushMicrotasks(); h.scheduler.tick();
+  assert.equal(h.root.classList.contains('animation-ready'), false, 'do not reveal undecoded pixels');
+  h.requests[0].resolveDecode(); await flushMicrotasks();
+  assert.equal(h.root.classList.contains('animation-ready'), false, 'do not reveal an empty canvas');
+  h.scheduler.tick();
+  assert.equal(h.root.classList.contains('animation-ready'), true);
+  assert.equal(h.status.hidden, true);
+  assert.equal(h.timers.size, 0);
 });
 
-test('loader timeout releases the page even if the animation script never runs', () => {
-  const h = loadingHarness();
-  h.timers.get(1)();
-  h.document.dispatch('DOMContentLoaded');
-  assert.equal(h.root.classList.contains('background-loading'), false);
-  assert.equal(h.loader.getAttribute('aria-hidden'), 'true');
-  assert.equal(h.storage.size, 0, 'a failed visit must allow a later retry');
-});
-
-test('loader can be skipped without storage and restores focus from its Continue button', () => {
-  const h = loadingHarness({ blockedStorage: true });
-  h.document.dispatch('DOMContentLoaded');
-  h.document.activeElement = { closest: () => h.loader };
-  h.button.dispatch('click');
-  assert.equal(h.root.classList.contains('background-loading'), false);
-  assert.equal(h.main.focused, true);
-  assert.doesNotThrow(() => h.window.portfolioIntro.finish(true));
-  const escape = loadingHarness();
-  escape.document.dispatch('keydown', { key: 'Escape' });
-  assert.equal(escape.root.classList.contains('background-loading'), false);
-});
-
-test('loader is bypassed for reduced motion and data saving', () => {
-  for (const preference of [{ reducedMotion: true }, { saveData: true }]) {
-    const h = loadingHarness(preference);
+test('each visit checks all frame files without a persistent ready flag or scroll lock', () => {
+  for (let visit = 0; visit < 2; visit++) {
+    const h = animationHarness();
+    assert.equal(h.downloads.length, 4);
+    assert.equal(h.root.classList.contains('animation-ready'), false);
     assert.equal(h.root.classList.contains('background-loading'), false);
+  }
+});
+
+test('failed, empty, unavailable, or timed-out downloads keep the poster and release preload resources', async () => {
+  for (const failure of ['network', 'empty', 'http', 'timeout']) {
+    const h = animationHarness();
+    h.downloads[0].succeed(); await flushMicrotasks();
+    if (failure === 'network') h.downloads[1].fail();
+    if (failure === 'empty') h.downloads[1].succeed({ empty: true });
+    if (failure === 'http') h.downloads[1].succeed({ ok: false });
+    if (failure === 'timeout') [...h.timers.values()][0]();
+    await flushMicrotasks();
+    const count = h.downloads.length;
+    h.window.dispatch('scroll'); h.window.dispatch('resize');
+    h.document.dispatch('visibilitychange'); await flushMicrotasks();
+    assert.equal(h.downloads.length, count, 'failed downloads must not loop forever');
+    assert.equal(h.revoked.length, 1, 'release already downloaded blobs after a failure');
+    assert.equal(h.requests.length, 0);
+    assert.equal(h.root.classList.contains('animation-ready'), false);
+    assert.equal(h.canvas.hidden, true);
+    assert.equal(h.status.hidden, true);
     assert.equal(h.timers.size, 0);
   }
 });
 
-test('unavailable canvas or a failed first frame releases the loader immediately', () => {
-  for (const option of [{ canvas: false }, { context: false }, { reducedMotion: true }]) {
-    const h = loadingHarness();
-    animationHarness({ ...option, intro: h.window.portfolioIntro });
-    assert.equal(h.root.classList.contains('background-loading'), false);
-    assert.equal(h.storage.size, 0);
+test('preloading pauses in a hidden tab and resumes without duplicate downloads', async () => {
+  const h = animationHarness();
+  h.document.hidden = true; h.document.dispatch('visibilitychange');
+  for (const download of h.downloads) download.succeed();
+  await flushMicrotasks();
+  assert.equal(h.downloads.length, 4);
+  assert.equal(h.status.hidden, true);
+  h.document.hidden = false; h.document.dispatch('visibilitychange');
+  await finishDownloads(h);
+  assert.equal(h.downloads.length, 240);
+  assert.equal(new Set(h.downloads.map(download => download.url)).size, 240);
+  await settleAnimation(h);
+});
+
+test('reduced motion, data saving, or unavailable canvas leave the static poster without preloading', () => {
+  for (const option of [{ canvas: false }, { context: false }, { reducedMotion: true }, { saveData: true }]) {
+    const h = animationHarness(option);
+    assert.equal(h.downloads.length, 0);
+    assert.equal(h.status.hidden, true);
+    assert.equal(h.root.classList.contains('animation-ready'), false);
   }
-  const h = loadingHarness();
-  const animation = animationHarness({ intro: h.window.portfolioIntro });
-  animation.requests[0].fail();
-  assert.equal(h.root.classList.contains('background-loading'), false);
-  assert.equal(h.storage.size, 0);
 });
 
 for (const preference of [{ reducedMotion: true }, { saveData: true }, { hidden: true }]) {
@@ -208,6 +238,7 @@ for (const preference of [{ reducedMotion: true }, { saveData: true }, { hidden:
     const harness = animationHarness(preference);
     assert.equal(harness.scheduler.pending, 0);
     assert.equal(harness.requests.length, 0);
+    assert.equal(harness.downloads.length, 0);
     assert.equal(harness.canvas.hidden, true);
     harness.window.scrollY = 1000;
     harness.window.dispatch('scroll');
@@ -221,15 +252,17 @@ test('animation exits gracefully when canvas or 2D context is unavailable', () =
   assert.doesNotThrow(() => animationHarness({ context: false }));
 });
 
-test('desktop animation buffers consecutive frames, caps resolution, and stops idle RAF', async () => {
+test('desktop downloads the full sequence but bounds decoded frames, caps resolution, and stops idle RAF', async () => {
   const h = animationHarness();
+  await finishDownloads(h);
+  assert.equal(h.downloads.length, 240);
   assert.equal(h.requests.length, 4);
   assert.deepEqual(h.requests.map(frameIndex), [0, 1, 2, 3], 'frame 0002 must not be skipped for 0006');
   h.scheduler.tick();
   assert.equal(h.canvas.width, 2160);
   assert.equal(h.drawCalls.length, 0, 'encoded images are not drawable until decoded');
   await settleAnimation(h);
-  assert.ok(h.requests.length > 4 && h.requests.length < 240, 'warm nearby frames without eager full-sequence loading');
+  assert.ok(h.requests.length > 4 && h.requests.length < 240, 'decode nearby frames without retaining the full sequence as pixels');
   assert.equal(currentPosition(h), 0);
   assert.equal(h.scheduler.pending, 0);
   const before = h.drawCalls.length; h.scheduler.tick();
@@ -240,6 +273,10 @@ test('mobile keeps the full animation with three-load budget, DPR one, and idle 
   const h = animationHarness({ mobile: true });
   h.window.innerWidth = 375;
   h.window.innerHeight = 812;
+  assert.equal(h.canvas.hidden, true);
+  assert.equal(h.downloads.length, 3, 'mobile starts only three concurrent downloads');
+  await finishDownloads(h);
+  assert.equal(h.downloads.length, 240);
   assert.equal(h.canvas.hidden, false);
   assert.equal(h.requests.length, 3, 'mobile starts only three concurrent loads');
   assert.deepEqual(h.requests.map(frameIndex), [0, 1, 2]);
@@ -259,10 +296,12 @@ test('mobile keeps the full animation with three-load budget, DPR one, and idle 
   await settleAnimation(h);
   assert.ok(Math.abs(currentPosition(h)) < 0.01, 'mobile also supports reverse scrolling');
   assert.equal(h.scheduler.pending, 0);
+  assert.equal(h.downloads.length, 240, 'scrolling reuses downloaded blobs instead of repeating network requests');
 });
 
 test('an image is not drawable until asynchronous decode completes', async () => {
-  const h = animationHarness(), first = h.requests[0];
+  const h = animationHarness(); await finishDownloads(h);
+  const first = h.requests[0];
   first.succeed({ decoded: false }); await flushMicrotasks(); h.scheduler.tick();
   assert.equal(first.decodeCalled, true);
   assert.equal(h.drawCalls.length, 0);
@@ -337,6 +376,7 @@ test('time-based easing remains comparable at 60Hz and 120Hz', async () => {
 
 test('failed frames do not retry forever or block later frames', async () => {
   const h = animationHarness();
+  await finishDownloads(h);
   for (const image of [...h.requests]) image.fail();
   await settleAnimation(h);
   assert.equal(h.scheduler.pending, 0);
@@ -346,7 +386,8 @@ test('failed frames do not retry forever or block later frames', async () => {
 });
 
 test('preference and visibility changes pause animation and avoid new hidden work', async () => {
-  const h = animationHarness(), first = [...h.requests];
+  const h = animationHarness(); await finishDownloads(h);
+  const first = [...h.requests];
   h.motion.matches = true; h.motion.dispatch('change');
   assert.equal(h.scheduler.pending, 0); assert.equal(h.canvas.hidden, true);
   for (const image of first) image.succeed(); await flushMicrotasks();
