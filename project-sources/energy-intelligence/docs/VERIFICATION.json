@@ -84,7 +84,7 @@
     "tracked": 19,
     "resolved": 15
   },
-  "external_llm_verification": "Not performed: automatic approval review required explicit destination/payload authorization. See work/llm-verification-review.json.",
+  "external_llm_verification": "Not performed with a live provider request. Deterministic evidence reports and automated grounding checks were verified.",
   "other_constraints": [
     "Original Git metadata still needs recovery from a trusted source.",
     "Historical weather availability uses the documented initialization-plus-eight-hours assumption."
