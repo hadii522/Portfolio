@@ -1,0 +1,107 @@
+# European Bidding Zone Configuration
+# Add any ENTSO-E EIC code here to extend the platform to new markets.
+# EIC codes reference: https://www.entsoe.eu/data/energy-identification-codes-eic/
+
+zones:
+  - eic: "10Y1001A1001A82H"
+    name: "Germany-Luxembourg"
+    short_name: "DE-LU"
+    country_codes: ["DE", "LU"]
+    timezone: "Europe/Berlin"
+    enabled: true
+    color: "#4F81BD"
+
+  - eic: "10YFR-RTE------C"
+    name: "France"
+    short_name: "FR"
+    country_codes: ["FR"]
+    timezone: "Europe/Paris"
+    enabled: true
+    color: "#C0504D"
+
+  - eic: "10YGB----------A"
+    name: "Great Britain"
+    short_name: "GB"
+    country_codes: ["GB"]
+    timezone: "Europe/London"
+    enabled: true
+    color: "#9BBB59"
+
+  - eic: "10YNL----------L"
+    name: "Netherlands"
+    short_name: "NL"
+    country_codes: ["NL"]
+    timezone: "Europe/Amsterdam"
+    enabled: true
+    color: "#F79646"
+
+  - eic: "10YES-REE------0"
+    name: "Spain"
+    short_name: "ES"
+    country_codes: ["ES"]
+    timezone: "Europe/Madrid"
+    enabled: true
+    color: "#8064A2"
+
+  - eic: "10YIT-GRTN-----B"
+    name: "Italy"
+    short_name: "IT"
+    country_codes: ["IT"]
+    timezone: "Europe/Rome"
+    enabled: true
+    color: "#4BACC6"
+
+  - eic: "10YBE----------2"
+    name: "Belgium"
+    short_name: "BE"
+    country_codes: ["BE"]
+    timezone: "Europe/Brussels"
+    enabled: true
+    color: "#F2C811"
+
+  - eic: "10YNO-0--------C"
+    name: "Norway"
+    short_name: "NO"
+    country_codes: ["NO"]
+    timezone: "Europe/Oslo"
+    enabled: true
+    color: "#72A4D4"
+
+  - eic: "10YSE-1--------K"
+    name: "Sweden"
+    short_name: "SE"
+    country_codes: ["SE"]
+    timezone: "Europe/Stockholm"
+    enabled: true
+    color: "#D6B5A5"
+
+  - eic: "10Y1001A1001A65H"
+    name: "Denmark"
+    short_name: "DK"
+    country_codes: ["DK"]
+    timezone: "Europe/Copenhagen"
+    enabled: true
+    color: "#E06C75"
+
+  - eic: "10YFI-1--------U"
+    name: "Finland"
+    short_name: "FI"
+    country_codes: ["FI"]
+    timezone: "Europe/Helsinki"
+    enabled: true
+    color: "#56B6C2"
+
+# Gas hubs tracked alongside electricity markets
+gas_hubs:
+  - code: "TTF"
+    name: "Title Transfer Facility"
+    country: "NL"
+    currency: "EUR"
+  - code: "NBP"
+    name: "National Balancing Point"
+    country: "GB"
+    currency: "GBP"
+  - code: "NCG"
+    name: "Net Connect Germany"
+    country: "DE"
+    currency: "EUR"

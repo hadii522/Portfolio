@@ -1,0 +1,192 @@
+[
+  {
+    "id": "P001",
+    "category": "Recovery",
+    "title": "Incomplete source tree and Git metadata",
+    "status": "resolved",
+    "problem": "162 of 207 indexed files are absent; Git refs and some objects are missing.",
+    "fix": "Rebuilt the missing application as coherent FastAPI, PostgreSQL, worker and Next.js modules. Preserved original material; Git recovery is separately tracked.",
+    "verification": "Real-source runtime, 29 backend checks and five browser scenarios verified.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P002",
+    "category": "Infrastructure",
+    "title": "Docker stack was too heavy for local operation",
+    "status": "resolved",
+    "problem": "Original startup requires numerous containers and unavailable Python dependencies.",
+    "fix": "Replaced the container stack with a project venv, persistent native PostgreSQL, durable Python worker and one-command supervisor.",
+    "verification": "Full stack started successfully; cooperative stop and PostgreSQL fast shutdown completed with exit code 0.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P003",
+    "category": "Data integrity",
+    "title": "Elexon endpoints use different date parameter contracts",
+    "status": "resolved",
+    "problem": "A demand probe using generic from/to parameters returned a wider default window.",
+    "fix": "Implemented endpoint-specific demand date parameters plus independent half-open timestamp validation.",
+    "verification": "Real response contracts verified; wrong-window and timestamp validation tests pass.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P004",
+    "category": "Security",
+    "title": "Outdated frontend framework and broken API rewrite",
+    "status": "resolved",
+    "problem": "Next.js 15.1.0 predates security updates; proxy duplicated API version paths and assumed container localhost.",
+    "fix": "Installed Next.js 16.4.6, consistent same-origin API routing, local write tokens, Origin and trusted-host checks.",
+    "verification": "Production build, TypeScript, ESLint and write-auth/origin integration checks pass.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P005",
+    "category": "Data science",
+    "title": "Forecast evaluation needs time-aware validation",
+    "status": "resolved",
+    "problem": "Single holdout selection, synthetic data and uncalibrated intervals cannot substantiate forecasting performance.",
+    "fix": "Implemented publication-aware features, independent residual calibration, validation-only champion selection, held-out walk-forward testing and explicit model cards.",
+    "verification": "Five comparable model candidates evaluated on 336 held-out periods. Full weather coverage; model and feature snapshots persisted.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P006",
+    "category": "Infrastructure",
+    "title": "Windows IPv4 and database process startup",
+    "status": "resolved",
+    "problem": "The original launcher tried localhost/IPv6 against an IPv4 listener and waited for inherited subprocess pipes.",
+    "fix": "Use explicit 127.0.0.1, pg_ctl lifecycle management and child exit events; keep data persistent and use orderly shutdown.",
+    "verification": "Clean single-command startup and shutdown verified against PostgreSQL 17.12.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P007",
+    "category": "Recovery",
+    "title": "Portable PostgreSQL lacks pg_dump",
+    "status": "resolved",
+    "problem": "The first backup job failed because the binary distribution omits pg_dump.",
+    "fix": "Add repeatable-read logical ZIP backups containing database tables, raw archives and models, a row-count manifest, integrity checks, and guarded empty-database restore.",
+    "verification": "Actual full backup created and CRC checked; disposable PostgreSQL backup/restore round trip passes, including settings and artifact preservation.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P008",
+    "category": "Data integrity",
+    "title": "GB settlement dates cross UTC and daylight-saving boundaries",
+    "status": "resolved",
+    "problem": "Treating a settlement date as a fixed UTC day can discard summer intervals and distort DST days.",
+    "fix": "Derive settlement request windows from Europe/London local midnight and preserve original UTC timestamps.",
+    "verification": "Unit checks verify 23h spring, 25h autumn and 24h ordinary settlement days.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P009",
+    "category": "Data coverage",
+    "title": "Context history was shorter than the selected range",
+    "status": "resolved",
+    "problem": "Initial ingestion bounded price and generation context to fourteen days despite a 120-day demand backfill.",
+    "fix": "Backfill all selected market datasets across the requested interval, with bounded generation chunks and date-safe price requests.",
+    "verification": "Full real-data job completed: 86,002 distinct observed metric/period points and 52,416 weather vintage records at verification time.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P010",
+    "category": "Interface",
+    "title": "Charts initially rendered empty during animation",
+    "status": "resolved",
+    "problem": "Early screenshots showed an empty generation ring and partly drawn weather curves. Missing timestamps could also connect through gaps.",
+    "fix": "Disable initial chart animations for reliable immediate rendering and insert explicit null chart positions for absent periods. Format axes by actual units.",
+    "verification": "Desktop and mobile screenshots visually inspected; real-data browser tests pass.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P011",
+    "category": "Operations",
+    "title": "Safe service restart and crash recovery",
+    "status": "resolved",
+    "problem": "Windows venv launchers can leave child processes alive after killing only the parent; interrupted jobs need explicit recovery.",
+    "fix": "Use run-specific stop markers, cooperative Python exit, bounded child-tree cleanup, pg_ctl shutdown, a single-worker advisory lock, and interrupted-job recovery.",
+    "verification": "Supervisor stop returned exit code 0; orderly API shutdown and persistent PostgreSQL shutdown verified. Stored data is retained.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P012",
+    "category": "Data science",
+    "title": "Experiments must reproduce published predictions",
+    "status": "resolved",
+    "problem": "A model name and score alone do not reproduce a forecast.",
+    "fix": "Record input-pool fingerprint, exact sample and future-feature matrices, trained artifact, versions, splits, seed and calibration details.",
+    "verification": "Reloaded the trusted local artifact and feature CSV: all 48 published predictions reproduced with 0.0 MW maximum absolute difference.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P013",
+    "category": "Repository",
+    "title": "Original Git history is incomplete",
+    "status": "open",
+    "problem": "The supplied .git lacks refs and some indexed objects, so normal Git operations fail.",
+    "fix": "Preserve original Git metadata unchanged. Publish a fresh, allowlisted source release in the portfolio repository without reconstructing original history.",
+    "verification": "Source release is independent of the damaged metadata; original-history recovery remains outstanding.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P014",
+    "category": "External verification",
+    "title": "Live external LLM verification outstanding",
+    "status": "open",
+    "problem": "Optional external LLM synthesis has not been verified with a live provider request.",
+    "fix": "Use deterministic evidence briefs by default. Run a live provider check only with an appropriate key and an explicitly selected evidence payload.",
+    "verification": "No live provider request was performed. Deterministic reports and grounding/schema/redaction tests pass.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P015",
+    "category": "Dependencies",
+    "title": "Upstream test-client deprecation warning",
+    "status": "open",
+    "problem": "The installed Starlette TestClient warns that its httpx compatibility path is deprecated.",
+    "fix": "Runtime provider calls and tests currently work. Review a supported test-client migration before changing this dependency; do not suppress the warning.",
+    "verification": "29 backend tests pass with one recorded deprecation warning. This warning does not affect the running UI or data worker.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P016",
+    "category": "Browser verification",
+    "title": "Keyboard shortcut test ran before hydration",
+    "status": "resolved",
+    "problem": "A browser test pressed Ctrl+K before client listeners were attached and intermittently missed the command dialog.",
+    "fix": "Wait for the observable connected client state before exercising the shortcut. Keep both keyboard and button navigation usable.",
+    "verification": "All five browser scenarios pass, including command search, chart filtering/export, evidence, settings persistence and mobile overflow.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P017",
+    "category": "Provenance",
+    "title": "Aggregate facts need all contributing source archives",
+    "status": "resolved",
+    "problem": "A mean or range computed across multiple requests cannot be attributed only to the latest request file.",
+    "fix": "Record the contributing archive set and source row count alongside each aggregate evidence fact.",
+    "verification": "Generated deterministic reports preserve evidence IDs, source windows, archive references and validation traces.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P018",
+    "category": "Scientific limitation",
+    "title": "Historical weather availability is an assumption",
+    "status": "documented",
+    "problem": "Archived forecast initialization is not a measured publication timestamp; six-city sampling is an approximation.",
+    "fix": "Filter by an explicitly recorded run-plus-eight-hours assumption and actual retrieval for live composites. Preserve locally observed vintages going forward. Require complete weather coverage before adding weather candidates.",
+    "verification": "Archived training coverage is 100%; model cards and research protocol state the availability and spatial-sampling limitations. No causal or profitability claim is inferred.",
+    "date": "2026-11-25"
+  },
+  {
+    "id": "P019",
+    "category": "Interface",
+    "title": "Theme preference must survive navigation",
+    "status": "resolved",
+    "problem": "A route-local theme state could disagree with the document theme after navigating between views.",
+    "fix": "Use a browser-backed external theme store with a stable server snapshot, persisted preference, and storage/theme events. Link source-ledger rows to their validated raw archive endpoint.",
+    "verification": "Browser test switches to light theme, navigates to another view, verifies the retained theme, then restores dark mode. All five browser scenarios pass.",
+    "date": "2026-11-25"
+  }
+]

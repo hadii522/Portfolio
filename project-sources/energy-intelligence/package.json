@@ -1,0 +1,22 @@
+{
+  "name": "etip-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db": "node scripts/database.mjs",
+    "start": "node scripts/start.mjs",
+    "stop": "node scripts/stop.mjs",
+    "setup": "node scripts/setup.mjs",
+    "check": "node scripts/check.mjs",
+    "test:browser": "playwright test"
+  },
+  "dependencies": {
+    "embedded-postgres": "17.12.0-beta.19",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "prettier": "^3.10.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name":"etip-frontend", "version":"1.0.0", "private":true,
+  "scripts":{"dev":"next dev --hostname 127.0.0.1","build":"next build","start":"next start --hostname 127.0.0.1","lint":"eslint src","type-check":"tsc --noEmit"},
+  "dependencies":{"next":"16.4.6","react":"^19.2.0","react-dom":"^19.2.0","recharts":"^3.0.0","@tanstack/react-query":"^5.90.0","lucide-react":"^0.468.0","react-markdown":"^10.1.0"},
+  "devDependencies":{"@types/node":"^22","@types/react":"^19","@types/react-dom":"^19","typescript":"^5.9.0","eslint":"^9","eslint-config-next":"16.4.6"}
+}

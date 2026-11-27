@@ -5,6 +5,33 @@ const path = require('node:path');
 const vm = require('node:vm');
 const siteRoot = path.resolve(process.env.PORTFOLIO_TEST_SITE_ROOT || path.resolve(__dirname, '..'));
 
+test('gallery case links resolve to unique case studies and every CV is a PDF', () => {
+  const cases = fs.readFileSync(path.join(siteRoot, 'case-studies.html'), 'utf8');
+  const gallery = fs.readFileSync(path.join(siteRoot, 'projects.html'), 'utf8');
+  const ids = [...cases.matchAll(/class="case-study" id="([^"]+)"/g)].map(m => m[1]);
+  assert.equal(ids.length, 16);
+  assert.equal(new Set(ids).size, 16);
+  const links = [...gallery.matchAll(/href="case-studies.html#([^"]+)"/g)].map(m => m[1]);
+  assert.equal(links.length, 14);
+  for (const id of links) assert.ok(ids.includes(id), `Missing case ${id}`);
+  for (const name of ['CV_Aizaz_Haider_Goraya.pdf', 'CV_AI_ML.pdf', 'CV_Data_Engineer.pdf']) {
+    assert.equal(fs.readFileSync(path.join(siteRoot, name)).subarray(0, 5).toString(), '%PDF-');
+  }
+});
+
+test('case search combines role and text filters; deep links reset filters and open a case', () => {
+  const cards = [element({id:'energy-intelligence',textContent:'Energy forecast',dataset:{role:'AI / ML'},scrollIntoView(){this.scrolled=true;}}), element({id:'forum-pipeline',textContent:'Forum ingestion',dataset:{role:'Data engineering'},scrollIntoView(){this.scrolled=true;}})];
+  const search=element({value:''}),role=element({value:'all'}),count=element();
+  const window=eventTarget();const location={hash:''};
+  const document={querySelectorAll:()=>cards,getElementById:id=>({'case-search':search,'case-role':role,'case-count':count}[id])};
+  vm.runInNewContext(fs.readFileSync(path.join(siteRoot,'case-studies.js'),'utf8'),{document,window,location});
+  assert.equal(count.textContent,'2 case studies');
+  search.value='forecast';search.dispatch('input');assert.equal(cards[1].hidden,true);
+  role.value='Data engineering';role.dispatch('change');assert.equal(count.textContent,'0 case studies');
+  location.hash='#forum-pipeline';window.dispatch('hashchange');
+  assert.equal(search.value,'');assert.equal(role.value,'all');assert.equal(cards[1].open,true);assert.equal(cards[1].scrolled,true);
+});
+
 function eventTarget(properties = {}) {
   const listeners = new Map();
   return Object.assign({

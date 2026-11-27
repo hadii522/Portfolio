@@ -1,0 +1,92 @@
+{
+  "verified_at": "2026-11-25T17:46:13.458554+00:00",
+  "scope": "Local GB energy intelligence application; real provider data; no Docker or cloud hosting required",
+  "checks": {
+    "backend_tests": {
+      "passed": 29,
+      "unit": 25,
+      "postgres_integration": 4,
+      "warning": "Upstream Starlette/httpx TestClient deprecation"
+    },
+    "browser_scenarios": {
+      "passed": 5,
+      "desktop": "1440x1050",
+      "mobile": "390x844"
+    },
+    "ruff": "passed",
+    "python_format": "passed",
+    "typescript": "passed",
+    "eslint": "passed",
+    "production_build": "passed",
+    "supervised_start_stop_restart": "passed"
+  },
+  "data": {
+    "observed_points": 86002,
+    "stored_vintages": 86004,
+    "weather_vintages": 52416
+  },
+  "model": {
+    "name": "Weather ridge regression",
+    "run_id": "8ecbab1b-508e-4613-a893-25dc59c151ff",
+    "test_scores": {
+      "Seasonal naive": {
+        "n": 336,
+        "mae": 1654.220238095238,
+        "rmse": 2174.4872206152527,
+        "wape": 4.9638094816228895,
+        "bias": -1319.8809523809523,
+        "coverage": 86.01190476190477
+      },
+      "Ridge regression": {
+        "n": 336,
+        "mae": 1202.5546237967271,
+        "rmse": 1594.1393901318781,
+        "wape": 3.608498981154392,
+        "bias": 65.3557633876623,
+        "coverage": 93.45238095238095
+      },
+      "Gradient boosting": {
+        "n": 336,
+        "mae": 1717.5360253092174,
+        "rmse": 2136.660987195379,
+        "wape": 5.153800812687159,
+        "bias": -398.8166770359284,
+        "coverage": 84.22619047619048
+      },
+      "Weather ridge regression": {
+        "n": 336,
+        "mae": 1147.0089670363927,
+        "rmse": 1521.6688612084529,
+        "wape": 3.4418234373904024,
+        "bias": -273.29567956000204,
+        "coverage": 92.85714285714286
+      },
+      "Weather gradient boosting": {
+        "n": 336,
+        "mae": 1594.827694232868,
+        "rmse": 1979.0489389607922,
+        "wape": 4.785590605095783,
+        "bias": -698.9270573818633,
+        "coverage": 83.92857142857143
+      }
+    },
+    "weather_coverage": 1,
+    "prediction_reproduction": {
+      "verified_at": "2026-11-25T17:37:09.337288+00:00",
+      "run_id": "8ecbab1b-508e-4613-a893-25dc59c151ff",
+      "model": "Weather ridge regression",
+      "reproduced_points": 48,
+      "max_absolute_difference_mw": 0.0,
+      "input_fingerprint": "4e0943bdb25633330e8937fefc8bfa0784dcb2bf91f4b774e4acc4bd668c7126"
+    }
+  },
+  "engineering": {
+    "tracked": 19,
+    "resolved": 15
+  },
+  "external_llm_verification": "Not performed: automatic approval review required explicit destination/payload authorization. See work/llm-verification-review.json.",
+  "other_constraints": [
+    "Original Git metadata still needs recovery from a trusted source.",
+    "Historical weather availability uses the documented initialization-plus-eight-hours assumption."
+  ]
+}
